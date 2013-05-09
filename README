@@ -1,0 +1,18 @@
+gitlab
+
+This module allows you to install GitLab on a server.
+
+License
+-------
+
+Apache License, Version 2.0
+
+Contact
+-------
+
+Ingmar Steen <iksteen@gmail.com>
+
+Support
+-------
+
+Please log tickets and issues at the [github page](http://github.com/iksteen/puppet-gitlab)
