@@ -33,6 +33,7 @@ class gitlab::shell {
   exec { "${gitlab::git_home}/gitlab-shell/bin/install":
     user        => $gitlab::git_user,
     refreshonly => true,
+    before      => Anchor['gitlab-pre-setup'],
     subscribe   => [
       Vcsrepo['gitlab-shell'],
       File['gitlab-shell-config'],
