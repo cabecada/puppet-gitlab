@@ -27,11 +27,22 @@ class gitlab::application {
   file { 'gitlab-config':
     ensure  => present,
     path    => "${gitlab::git_home}/gitlab/config/gitlab.yml",
-    owner   => root,
-    group   => root,
+    owner   => $gitlab::git_user,
+    group   => $gitlab::git_group,
     mode    => '0644',
     content => template('gitlab/gitlab-config.yml.erb'),
     require => Vcsrepo['gitlab'],
+    before  => Anchor['gitlab-pre-setup'],
+  }
+
+  file { 'gitlab-gitconfig':
+    ensure  => present,
+    path    => "${gitlab::git_home}/.gitconfig",
+    owner   => root,
+    group   => root,
+    mode    => '0644',
+    content => template('gitlab/gitlab-gitconfig.erb'),
+    require => User[$gitlab::git_user],
     before  => Anchor['gitlab-pre-setup'],
   }
 
