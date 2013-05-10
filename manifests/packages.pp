@@ -33,4 +33,9 @@ class gitlab::packages {
     enable  => true,
     require => Package['redis-server'],
   }
+
+  file { '/usr/bin/python2':
+    ensure => link,
+    target => '/usr/bin/python2.7',
+  }
 }
