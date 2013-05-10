@@ -19,7 +19,6 @@ class gitlab::user {
   user { $gitlab::git_user:
     ensure     => present,
     gid        => $gitlab::git_group,
-    shell      => '/usr/sbin/nologin',
     home       => $gitlab::git_home,
     managehome => true,
     require    => Package['git-core'],
