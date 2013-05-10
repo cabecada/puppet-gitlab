@@ -68,13 +68,12 @@ class gitlab::application {
   }
 
   exec { 'gitlab-install-bundle':
-    command => '/usr/bin/bundle install --deployment --without development test mysql',
-    cwd     => "${gitlab::git_home}/gitlab",
-    timeout => 0,
-    require => [
-      Vcsrepo['gitlab'],
-    ],
-    before  => Anchor['gitlab-pre-setup'],
+    command     => '/usr/bin/bundle install --deployment --without development test mysql',
+    cwd         => "${gitlab::git_home}/gitlab",
+    timeout     => 0,
+    before      => Anchor['gitlab-pre-setup'],
+    subscribe   => Vcsrepo['gitlab'],
+    refreshonly => true,
   }
 
   exec { 'gitlab-setup':
