@@ -19,7 +19,7 @@ class gitlab::application {
     provider => git,
     path     => "${gitlab::git_home}/gitlab",
     source   => 'https://github.com/gitlabhq/gitlabhq.git',
-    revision => $gitlab::gitlabhq_revision,
+    revision => $gitlab::gitlab_revision,
     require  => User[$gitlab::git_user],
     before   => Anchor['gitlab-pre-setup'],
   }
