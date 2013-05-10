@@ -18,11 +18,32 @@ class gitlab::nginx {
     ],
   }
 
-  nginx::resource::vhost { $gitlab::www_server:
-    listen_port => $gitlab::www_port,
-    www_root    => "${gitlab::git_home}/gitlab/public",
-    index_files => [],
-    try_files   => ['$uri', '$uri/index.html', '$uri.html', '@gitlab'],
+  $ssl = $gitlab::www_scheme ? {
+    https => true,
+    default => false,
+  }
+
+  case $gitlab::www_scheme {
+    https: {
+      nginx::resource::vhost { $gitlab::www_server:
+        listen_port => $gitlab::www_port_real,
+        www_root    => "${gitlab::git_home}/gitlab/public",
+        index_files => [],
+        try_files   => ['$uri', '$uri/index.html', '$uri.html', '@gitlab'],
+        ssl         => true,
+        ssl_cert    => $gitlab::www_ssl_cert,
+        ssl_key     => $gitlab::www_ssl_key,
+        ssl_port    => $gitlab::www_port_real,
+      }
+    }
+    default: {
+      nginx::resource::vhost { $gitlab::www_server:
+        listen_port => $gitlab::www_port_real,
+        www_root    => "${gitlab::git_home}/gitlab/public",
+        index_files => [],
+        try_files   => ['$uri', '$uri/index.html', '$uri.html', '@gitlab'],
+      }
+    }
   }
 
   $config = {
@@ -40,5 +61,7 @@ class gitlab::nginx {
     proxy_read_timeout  => 300,
     vhost               => $gitlab::www_server,
     location_cfg_append => $config,
+    ssl                 => $ssl,
+    ssl_only            => $ssl,
   }
 }

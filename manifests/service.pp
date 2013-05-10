@@ -19,12 +19,13 @@ class gitlab::service {
   }
 
   service { 'gitlab':
-    ensure  => running,
-    enable  => true,
-    require => [
+    ensure    => running,
+    enable    => true,
+    require   => [
       File['/usr/bin/python2'],
       File['/etc/init.d/gitlab'],
       Exec['gitlab-setup'],
-    ]
+    ],
+    subscribe => File['gitlab-config'],
   }
 }

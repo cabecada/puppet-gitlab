@@ -59,6 +59,12 @@
 #   Specify which (sub) page on the server to host the gitlab application
 #   on. Currently does not support configuring nginx properly.
 #
+# [*www_ssl_cert*]
+#   Path to SSL certificate (if www_scheme == https).
+#
+# [*www_ssl_key*]
+#   Path to SSL key (if www_scheme == https).
+#
 # [*email_from*]
 #   Specify which email address GitLab will use to send from mail.
 #
@@ -106,8 +112,10 @@ class gitlab(
   $webserver                 = 'nginx',
   $www_scheme                = 'http',
   $www_server                = $::fqdn,
-  $www_port                  = 80,
+  $www_port                  = undef,
   $www_path                  = '',
+  $www_ssl_cert              = undef,
+  $www_ssl_key               = undef,
 
   $email_from                = "root@${::fqdn}",
   $support_email             = "root@${::fqdn}",
@@ -117,6 +125,14 @@ class gitlab(
   $username_changing_enabled = false,
 ) {
   $gitlab_url = "${www_scheme}://${www_server}/${www_path}"
+  if $www_port == undef {
+    case $www_scheme {
+      https: { $www_port_real = 443 }
+      default: { $www_port_real = 80 }
+    }
+  } else {
+    $www_port_real = $www_port
+  }
 
   if $create_db {
     require gitlab::database

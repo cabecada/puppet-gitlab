@@ -17,8 +17,8 @@ production: &base
   gitlab:
     ## Web server settings
     host: <%= scope.lookupvar('gitlab::www_server') %>
-    port: <%= scope.lookupvar('gitlab::www_port') %>
-    https: <%= b(scope.lookupvar('gitlab::www_scheme') == 'http') %>
+    port: <%= scope.lookupvar('gitlab::www_port_real') %>
+    https: <%= b(scope.lookupvar('gitlab::www_scheme') == 'https') %>
 <% if scope.lookupvar('gitlab::www_path') != '' -%>
     relative_url_root: <%= scope.lookupvar('gitlab:www_path') %>
 <% end %>
