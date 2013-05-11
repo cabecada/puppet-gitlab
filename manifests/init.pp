@@ -134,6 +134,9 @@ class gitlab(
     $www_port_real = $www_port
   }
 
+  anchor { 'gitlab-pre-setup': }
+  anchor { 'gitlab-post-setup': }
+
   if $create_db {
     require gitlab::database
   }

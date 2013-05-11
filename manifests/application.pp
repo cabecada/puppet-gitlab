@@ -12,8 +12,6 @@
 # Copyright 2013 Ingmar Steen
 #
 class gitlab::application {
-  anchor { 'gitlab-pre-setup': }
-
   vcsrepo { 'gitlab':
     ensure   => present,
     provider => git,
@@ -93,6 +91,7 @@ class gitlab::application {
     user        => $gitlab::git_user,
     group       => $gitlab::git_group,
     timeout     => 0,
+    before      => Anchor['gitlab-post-setup'],
     require     => Anchor['gitlab-pre-setup'],
     subscribe   => File['gitlab-database-yml'],
     refreshonly => true,

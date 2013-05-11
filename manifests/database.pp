@@ -15,5 +15,6 @@ class gitlab::database {
   postgresql::db { $gitlab::db_name:
     user     => $gitlab::db_user,
     password => postgresql_password($gitlab::db_user, $gitlab::db_pass),
+    before   => Anchor['gitlab-pre-setup'],
   }
 }
